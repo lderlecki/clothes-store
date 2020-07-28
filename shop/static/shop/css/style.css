@@ -1,0 +1,66 @@
+footer {
+    clear: both;
+    position: relative;
+    bottom: 0;
+    height: 200px;
+    width: 100%;
+}
+
+.carousel-inner {
+    height: 80%;
+}
+
+.active {
+    height: 80%;
+}
+
+.hello-msg{
+    font-size: 18px;
+    color: #ffffff;
+    margin-right: 20px;
+}
+
+.carousel-inner > .carousel-item > img{
+    position: relative;
+    height: 90vh;
+    object-fit: cover
+}
+
+.carousel {
+    overflow: hidden;
+}
+
+.carousel-item {
+    overflow: hidden;
+    backface-visibility: visible;
+}
+
+.carousel-inner>.item{
+   /*disables white flash*/
+   -webkit-transition: -webkit-transform .5s ease-in-out;
+   -o-transition: -o-transform .5s ease-in-out;
+   transition: transform .5s ease-in-out;
+}
+
+.carousel-caption{
+    background: rgb(0, 0, 0, 0.75);
+    max-width: 20%;
+    min-width: 300px;
+    margin: auto;
+    bottom: 10%;
+    border-radius: 25px;
+    float: right;
+    position: absolute;
+    overflow: hidden;
+
+}
+.carousel-control-prev, .carousel-control-next{
+    opacity: 0.9;
+}
+
+.carousel-text{
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

@@ -1,0 +1,49 @@
+from django.db import models
+from django.utils import timezone
+
+# Create your models here.
+
+PRODUCTS_GENDER = [
+    ('woman', 'Woman'),
+    ('man', 'Man'),
+]
+
+PRODUCTS_AGE = [
+    ('adult', 'Adult'),
+    ('kid', 'Kid'),
+]
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Category Name')
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Name')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    gender = models.CharField(max_length=20, null=True, choices=PRODUCTS_GENDER)
+    age = models.CharField(max_length=20, null=True, choices=PRODUCTS_AGE)
+    description = models.CharField(max_length=500, null=True, verbose_name='Description')
+    net_price = models.DecimalField(max_digits=100, decimal_places=2, default=0.00, verbose_name='Net Price')
+    vat = models.FloatField(verbose_name='VAT', default=0.23)
+    active = models.BooleanField(default=True, verbose_name='Is Active')
+    image = models.ImageField(null=True, blank=True)
+
+    date_created = models.DateTimeField(editable=False)
+    date_modified = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.date_created = timezone.now()
+        self.date_modified = timezone.now()
+        return super(Product, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def total_price(self):
+        return round(self.net_price * (self.vat + 1), 2)
