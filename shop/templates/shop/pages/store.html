@@ -1,44 +1,22 @@
 {%  extends 'shop/base.html' %}
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{#<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">#}
 
 {% block content %}
-<br>
-<div class="container">
-    <div class="products-brick">
-        <div class="item-product">
-            <img class="thumbnail" src="{% static 'shop/images/product_placeholder.png' %}" alt="">
-            <div class="box-element product">
-                <span class="item-price">199$</span>
-                <a class="item-name nounderline" href="#">Tutaj bedzie nazwa przemdiotu</a>
-{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
-            </div>
-        </div>
-        <div class="item-product">
-            <img class="thumbnail" src="{% static 'shop/images/product_placeholder.png' %}" alt="">
-            <div class="box-element product">
-                <span class="item-price">199$</span>
-                <a class="item-name nounderline" href="#">Tutaj bedzie nazwa przemdiotu</a>
-{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
-            </div>
-        </div>
-        <div class="item-product">
-            <img class="thumbnail" src="{% static 'shop/images/product_placeholder.png' %}" alt="">
-            <div class="box-element product">
-                <span class="item-price">199$</span>
-                <a class="item-name nounderline" href="#">Tutaj bedzie nazwa przemdiotu</a>
-{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
-            </div>
-        </div>
-        <div class="item-product">
-            <img class="thumbnail" src="{% static 'shop/images/product_placeholder.png' %}" alt="">
-            <div class="box-element product">
-                <span class="item-price">199$</span>
-                <a class="item-name nounderline" href="#">Tutaj bedzie nazwa przemdiotu</a>
-{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
-            </div>
+    <br>
+    <div class="container">
+        <div class="products-brick">
+            {% for product in products %}
+                <div class="item-product">
+                    <img class="thumbnail" src="{{ product.image_preview.url }}" alt="">
+                    <div class="box-element product">
+                        <span class="item-price">{{ product.total_price }}</span>
+                        <a class="item-name nounderline" href="#">{{ product.name }}</a>
+        {#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
-</div>
 {% endblock content %}

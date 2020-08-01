@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from .models import (
+        Product,
+    )
 
 
 # Create your views here.
@@ -7,7 +10,10 @@ def home(request):
 
 
 def store(request):
-    context = {}
+    products = Product.objects.all()
+    context = {
+        'products': products,
+    }
     return render(request, 'shop/pages/store.html', context)
 
 

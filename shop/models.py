@@ -14,6 +14,16 @@ PRODUCTS_AGE = [
 ]
 
 
+def get_image_path(instance, filename):
+    id = instance.product.id
+    return f'images/products/{id}/{filename}'
+
+
+def get_image_preview(instance, filename):
+    id = instance.id
+    return f'images/products/{id}/preview_{filename}'
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Category Name')
 
@@ -36,10 +46,11 @@ class Product(models.Model):
     age = models.CharField(max_length=20, null=True, choices=PRODUCTS_AGE)
     description = models.CharField(max_length=500, null=True, verbose_name='Description')
     net_price = models.DecimalField(max_digits=100, decimal_places=2, default=0.00, verbose_name='Net Price')
-    vat = models.FloatField(verbose_name='VAT', default=0.23)
+    vat = models.DecimalField(max_digits=100, decimal_places=2, verbose_name='VAT', default=0.23)
     active = models.BooleanField(default=True, verbose_name='Is Active')
-    image = models.ImageField(default='product_placeholder.png', null=True, blank=True)
-
+    image_preview = models.ImageField(upload_to=get_image_preview,
+                                      default='product_placeholder.png',
+                                      null=True, blank=True)
     date_created = models.DateTimeField(editable=False)
     date_modified = models.DateTimeField()
 
@@ -55,3 +66,8 @@ class Product(models.Model):
     @property
     def total_price(self):
         return round(self.net_price * (self.vat + 1), 2)
+
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='product_images')
+    image = models.ImageField(upload_to=get_image_path, verbose_name='Image')
