@@ -1,28 +1,161 @@
-footer {
-    clear: both;
+body{
+    background-color: lightgray;
+    min-height: 100%;
+}
+.container{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.nounderline {
+  text-decoration: none
+}
+
+/*---------------------
+  Navbar
+-----------------------*/
+#logo-icon{
+    margin-left: 10px;
+}
+
+#navbar{
+    /*overflow:auto;*/
+    justify-content: normal;
+}
+
+#nav-right{
+    margin-left: auto;
+    justify-content: flex-end;
+    float: right;
+}
+
+#store-name{
+    color: lightgray;
+}
+
+.navbar-nav{
+    flex-direction: row;
+}
+
+.nav-item{
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.navbar-items{
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+    text-align: left;
     position: relative;
-    bottom: 0;
-    height: 200px;
-    width: 100%;
+    margin: auto;
+}
+
+.dropdown{
+    position: absolute;
+}
+
+.navbar-items ul li .dropdown{
+    display: none;
+    top: 33px;
+	opacity: 1;
+    z-index: 9;
+}
+
+.navbar-items ul li a:hover, .navbar-items li a:focus{
+    text-decoration: underline!important;
+}
+
+.navbar-items ul li:hover .dropdown{
+    display: block;
+    position: absolute;
+    visibility: visible;
+    opacity: 1;
+    z-index: 9;
+}
+
+.navbar-items ul li .dropdown {
+	position: absolute;
+	left: 0px;
+	top: 33px;
+	width: 500px;
+	background: #111111;
+	text-align: left;
+	padding: 2px 0;
+	z-index: 9;
+	opacity: 0;
+	visibility: hidden;
+	-webkit-transition: all, 0.3s;
+	-o-transition: all, 0.3s;
+	transition: all, 0.3s;
+}
+
+.navbar-items ul li .dropdown li a:after {
+	display: none;
+}
+
+.navbar-items ul li .dropdown li {
+	display: block;
+	margin-right: 0;
+}
+
+.navbar-items ul li .dropdown li a {
+	font-size: 14px;
+	color: #ffffff;
+	font-weight: 400;
+	padding: 8px 20px;
+	text-transform: capitalize;
+}
+
+.nav-link{
+    float: left;
+    display: flex;
+    position: relative;
+
+}
+
+#cart-icon{
+    width: 25px;
+    display: inline-block;
+    margin-left: 15px;
+}
+
+#cart-total{
+	display: block;
+	text-align: center;
+	color:#fff;
+	background-color: red;
+	width: 20px;
+	height: 25px;
+	border-radius: 50%;
+	font-size: 14px;
+}
+
+/*---------------------
+  Carousel
+-----------------------*/
+
+.home-carousel{
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .carousel-inner {
-    height: 80%;
+
 }
 
 .active {
     height: 80%;
 }
 
-.hello-msg{
-    font-size: 18px;
-    color: #ffffff;
-    margin-right: 20px;
-}
-
 .carousel-inner > .carousel-item > img{
     position: relative;
-    height: 90vh;
+    overflow: hidden;
+    margin-right: 1000px;
+    min-height: 700px;
+    max-height: 900px;
     object-fit: cover
 }
 
@@ -63,4 +196,93 @@ footer {
     padding-left: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+/*---------------------
+  Products
+-----------------------*/
+
+.nounderline {
+  text-decoration: none !important
+}
+
+.products-brick{
+    display: flex;
+}
+
+.item-product{
+    width: 100%;
+    overflow: hidden;
+    margin: 0 5px 10px;
+}
+
+.box-element{
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 10px;
+}
+
+.item-price{
+    font-size: 15px;
+    display: block;
+    text-align: center;
+}
+.item-name{
+    text-transform: none;
+    color: gray;
+    font-size: 13px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.item-name:hover{
+    color: black;
+}
+
+.product{
+    display: block;
+    width: 100%;
+	border-radius: 0 0 4px 4px;
+}
+
+.col-lg-3{
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.btn{
+	border-radius: 0;
+}
+
+.thumbnail{
+	width: 100%;
+	height: 300px;
+	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+}
+
+
+@media (max-width: 978px) {
+    .home-carousel {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/*---------------------
+  Footer
+-----------------------*/
+
+footer {
+    clear: both;
+    position: relative;
+    display: block;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
 }

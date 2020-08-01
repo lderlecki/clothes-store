@@ -21,16 +21,24 @@ class Category(models.Model):
         return self.name
 
 
+class Brand(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Brand Name')
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Name')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True)
     gender = models.CharField(max_length=20, null=True, choices=PRODUCTS_GENDER)
     age = models.CharField(max_length=20, null=True, choices=PRODUCTS_AGE)
     description = models.CharField(max_length=500, null=True, verbose_name='Description')
     net_price = models.DecimalField(max_digits=100, decimal_places=2, default=0.00, verbose_name='Net Price')
     vat = models.FloatField(verbose_name='VAT', default=0.23)
     active = models.BooleanField(default=True, verbose_name='Is Active')
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(default='product_placeholder.png', null=True, blank=True)
 
     date_created = models.DateTimeField(editable=False)
     date_modified = models.DateTimeField()
