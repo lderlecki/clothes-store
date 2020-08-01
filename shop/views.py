@@ -17,6 +17,16 @@ def store(request):
     return render(request, 'shop/pages/store.html', context)
 
 
+def product(request, pk):
+    item = Product.objects.get(id=pk)
+    images = item.product_images.all()
+    context = {
+        'item': item,
+        'images': images,
+    }
+    return render(request, 'shop/pages/product.html', context)
+
+
 def cart(request):
     context = {}
     return render(request, 'shop/pages/cart.html', context)
