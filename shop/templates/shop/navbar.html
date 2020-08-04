@@ -11,17 +11,17 @@
     <div class="navbar-items">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'store-main' %}">Man</a>
+                <a class="nav-link" href="{% url 'store-man' %}">Man</a>
                 <ul class="dropdown">
-                    <li><a href="#">Categories</a></li>
+                    <li class="nav-header">Categories</li>
                     <li><a href="#">Shop Cart</a></li>
                     <li><a href="#">Checkout</a></li>
                     <li><a href="#">Blog Details</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Woman</a>
-                    <ul class="dropdown">
+                <a class="nav-link" href="{% url 'store-woman' %}">Woman</a>
+                <ul class="dropdown">
                     <li><a href="#">Product Details</a></li>
                     <li><a href="#">Shop Cart</a></li>
                     <li><a href="#">Checkout</a></li>

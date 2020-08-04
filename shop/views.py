@@ -9,8 +9,24 @@ def home(request):
     return render(request, 'shop/pages/index.html')
 
 
-def store(request):
+def store_main(request):
     products = Product.objects.all()
+    context = {
+        'products': products,
+    }
+    return render(request, 'shop/pages/store.html', context)
+
+
+def store_man(request):
+    products = Product.objects.filter(gender='man')
+    context = {
+        'products': products,
+    }
+    return render(request, 'shop/pages/store.html', context)
+
+
+def store_woman(request):
+    products = Product.objects.filter(gender='woman')
     context = {
         'products': products,
     }

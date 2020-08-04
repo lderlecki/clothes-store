@@ -9,9 +9,24 @@
         <div class="products-brick">
             {% for product in products %}
                 <div class="item-product">
-                    <img class="thumbnail" src="{{ product.image_preview.url }}" alt="">
+                    <a href="{% url 'product-detail' product.id %}">
+                        <img class="thumbnail" src="{{ product.image_preview.url }}" alt="">
+                    </a>
+                    <div class="cart-image">
+                        <svg height="56" width="56">
+                            <circle cx="28"
+                                    cy="28"
+                                    r="22"
+                                    stroke="black"
+                                    pathLength="1"
+                                    stroke-dasharray="1 1"
+                                    stroke-width="3"
+                                    fill="#ffc107"></circle>
+                        </svg>
+                        <img src="{% static 'shop/images/product-add-cart.svg' %}" alt="">
+                    </div>
                     <div class="box-element product">
-                        <span class="item-price">{{ product.total_price }}</span>
+                        <span class="item-price">{{ product.total_price }} PLN</span>
                         <a class="item-name nounderline" href="{% url 'product-detail' product.id %}">{{ product.name }}</a>
         {#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
                     </div>

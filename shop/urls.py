@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from . import views
@@ -7,9 +7,11 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('store/', views.store, name='store-main'),
+    path('store/', views.store_main, name='store-main'),
+    path('store/man/', views.store_man, name='store-man'),
+    path('store/woman/', views.store_woman, name='store-woman'),
     path('product/<str:pk>/', views.product, name='product-detail'),
-    path('cart/', views.cart, name='cart'),
+    path('cart/', include('carts.urls')),
     path('checkout/', views.checkout, name='checkout'),
 
 ]
