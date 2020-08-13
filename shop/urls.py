@@ -12,6 +12,6 @@ urlpatterns = [
     path('store/woman/', views.store_woman, name='store-woman'),
     path('product/<str:pk>/', views.product, name='product-detail'),
     path('cart/', include('carts.urls')),
-    path('checkout/', views.checkout, name='checkout'),
+    # path('checkout/', views.checkout, name='checkout'),
 
 ]

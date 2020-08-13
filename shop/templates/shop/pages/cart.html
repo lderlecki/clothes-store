@@ -12,13 +12,13 @@
                     </div>
                     <div class="cart-detail">
                         <div class="items-counter">
-                            <span>Products in cart: {{ cart.items_number }}</span>
+                            <span>Products in cart: <span id="cart-items-number">{{ cart.items_number }}</span></span>
                         </div>
                         <div class="cart-total">
-                            <span class="price">Total: {{ cart.cart_total }}PLN</span>
+                            <span>Total: <span id="cart-total-price"  class="price">{{ cart.cart_total }}</span>PLN</span>
                         </div>
                         <div class="cart-checkout">
-                            <button class="cart-checkout-button">Checkout</button>
+                            <a href="{% url 'checkout' %}">Checkout</a>
                         </div>
                     </div>
                 </div>
@@ -32,9 +32,10 @@
                     <div class="cart-col"><span>Quantity</span></div>
                     <div class="cart-col"><span>Total</span></div>
                 </div>
+                <hr>
                 <div class="cart-items">
                     {% for item in items %}
-                        <div class="cart-item-row">
+                        <div class="cart-item-row" id="item-data-{{ item.product.id }}">
                             <div class="cart-col col-image">
                                 <img class="cart-image-preview" src="{{ item.product.image_preview.url }}" alt="">
                             </div>
@@ -46,16 +47,16 @@
                             </div>
                             <div class="cart-col">
                                 <div class="quantity">
-                                    <span>{{ item.quantity }}</span>
+                                    <span style="margin: auto 10px" id="product-quantity-{{ item.product.id }}">{{ item.quantity }}</span>
                                     <div class="quantity-arrows">
-                                        <img class="change-quantity" src="{% static 'shop/images/arrow_up.png' %}">
-                                        <img class="change-quantity" src="{% static 'shop/images/arrow_down.png' %}">
+                                        <img data-product='{{ item.product.id }}' data-action="add" class="change-quantity update-cart" src="{% static 'shop/images/arrow_up.png' %}">
+                                        <img data-product='{{ item.product.id }}' data-action="remove" class="change-quantity update-cart" src="{% static 'shop/images/arrow_down.png' %}">
                                     </div>
                                 </div>
 
                             </div>
                             <div class="cart-col price">
-                                <span>{{ item.item_total }}PLN</span>
+                                <span id="item-total-{{ item.product.id }}">{{ item.item_total }}</span><span>PLN</span>
                             </div>
                         </div>
                     {% endfor %}

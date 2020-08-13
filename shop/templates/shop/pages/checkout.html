@@ -1,0 +1,79 @@
+{%  extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="container-fluid">
+        <div class="checkout-wrapper">
+            <section class="client-info">
+                <form id="shipping-data" action="">
+                    <div class="user-info">
+                        <p>Client Information:</p>
+                        <div class="user-data">
+                            <div class="form-field">
+                                <input type="text" required class="form-control" name="name" placeholder="Name">
+                            </div>
+                            <div class="form-field">
+                                <input type="text" required class="form-control" name="email" placeholder="Email">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="shipping-info">
+                        <p>Shipping Information:</p>
+                        <hr>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" name="address" placeholder="Address">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" name="city" placeholder="City">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" name="state" placeholder="State">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" name="zipcode" placeholder="Zip code">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" name="country" placeholder="Country">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="checkout">
+                        <a class="proceed-btn">Proceed</a>
+                    </div>
+
+                </form>
+            </section>
+            <section class="order-summary">
+                <a class="btn btn-warning" href="{% url 'cart' %}">Back to cart</a>
+                <hr>
+                <div class="order-details">
+                    <p>Order summary</p>
+                    <hr>
+                    <div class="items-checkout">
+                        {% for item in items %}
+                        <div class="cart-item-row">
+                            <div class="cart-col col-image">
+                                <img class="cart-image-preview" src="{{ item.product.image_preview.url }}" alt="">
+                            </div>
+                            <div class="cart-col">
+                                <span>{{ item.product.name }}</span>
+                            </div>
+                            <div class="cart-col price">
+                                <span>{{ item.product.total_price }}PLN</span>
+                            </div>
+                            <div class="cart-col">
+                                <span style="margin: auto 10px">x{{ item.quantity }}</span>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+{% endblock content %}

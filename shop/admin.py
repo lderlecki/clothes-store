@@ -8,6 +8,7 @@ class ProductImagesInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
     inlines = [
         ProductImagesInline,
     ]

@@ -17,6 +17,11 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def total_cart_items(self):
+        if not self.cart_set.get(completed=False):
+            return 0
+        return self.cart_set.get(completed=False).items_number
 
 # class Address(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)

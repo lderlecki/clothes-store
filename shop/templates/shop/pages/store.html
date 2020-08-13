@@ -12,7 +12,7 @@
                     <a href="{% url 'product-detail' product.id %}">
                         <img class="thumbnail" src="{{ product.image_preview.url }}" alt="">
                     </a>
-                    <div class="cart-image">
+                    <div data-product="{{ product.id }}" data-action="add" class="cart-image add-to-cart">
                         <svg height="56" width="56">
                             <circle cx="28"
                                     cy="28"
@@ -28,7 +28,6 @@
                     <div class="box-element product">
                         <span class="item-price">{{ product.total_price }} PLN</span>
                         <a class="item-name nounderline" href="{% url 'product-detail' product.id %}">{{ product.name }}</a>
-        {#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
                     </div>
                 </div>
             {% endfor %}
