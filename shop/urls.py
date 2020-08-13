@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from . import views
+from users import views as user_views
 
 
 urlpatterns = [
@@ -12,6 +13,6 @@ urlpatterns = [
     path('store/woman/', views.store_woman, name='store-woman'),
     path('product/<str:pk>/', views.product, name='product-detail'),
     path('cart/', include('carts.urls')),
-    # path('checkout/', views.checkout, name='checkout'),
+    path('customer/', include('users.urls')),
 
 ]
