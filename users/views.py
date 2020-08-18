@@ -3,10 +3,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from .forms import CreateUserForm
+from carts.models import Cart
+from .forms import (
+    CreateUserForm,
+    CustomerDataForm,
+    SetNewPasswordForm,
+    )
+
+LOGIN_URL = '/customer/login/'
 
 
 def loginView(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -20,13 +29,14 @@ def loginView(request):
     return render(request, 'users/login.html')
 
 
-# @login_required(login_url='login')
 def logoutView(request):
     logout(request)
     return redirect('login')
 
 
 def registerView(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -39,3 +49,49 @@ def registerView(request):
         'form': form,
     }
     return render(request, 'users/register.html', context)
+
+
+@login_required(login_url='login')
+def accountView(request):
+    return render(request, 'users/account.html')
+
+
+@login_required(login_url='login')
+def editAccountView(request):
+    user = request.user
+    password_form = SetNewPasswordForm(user=user)
+    customer_form = CustomerDataForm(instance=user.customer)
+    if request.method == 'POST':
+        data = request.POST
+        customer_form = CustomerDataForm(data, instance=user.customer)
+        if customer_form.is_valid():
+            instance = customer_form.save(user)
+            messages.success(request, 'Your data has been updated')
+            if data['password']:
+                password_form = SetNewPasswordForm(data, user=user)
+                if password_form.is_valid():
+                    password_form.save(user)
+                    messages.success(request, 'Your password has been changed')
+
+    context = {
+        'customer_form': customer_form,
+        'password_form': password_form,
+    }
+
+    return render(request, 'users/account-edit.html', context)
+
+
+@login_required(login_url='login')
+def orderHistoryView(request):
+    customer = request.user.customer
+    orders = Cart.objects.all()
+
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'users/account-order-history.html', context)
+
+
+@login_required(login_url='login')
+def addressAccountView(request):
+    return render(request, 'users/account-address.html')

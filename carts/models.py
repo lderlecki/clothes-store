@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from shop.models import *
@@ -43,6 +45,10 @@ class Cart(models.Model):
         items = self.cartitem_set.all()
         total = sum([item.item_total for item in items])
         return total
+
+    @property
+    def get_date(self):
+        return self.date_ordered.strftime('%Y-%m-%d')
 
 
 class ShippingAddress(models.Model):

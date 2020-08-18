@@ -5,7 +5,7 @@ from .models import Customer
 
 def customer_profile(sender, instance, created, **kwargs):
     if created:
-        Customer.objects.create(user=instance, name=instance.username)
+        Customer.objects.create(user=instance, name=instance.username, email=instance.email)
 
 
 post_save.connect(customer_profile, sender=User)

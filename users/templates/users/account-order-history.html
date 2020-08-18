@@ -1,0 +1,24 @@
+{% extends 'users/account.html' %}
+
+{% block account-link %}
+<h4>Order History</h4>
+<table class="order-table">
+    <tr class="theader">
+        <th>Order Number</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Invoice</th>
+    </tr>
+{% for order in orders %}
+    <tr class="tbody">
+        <th>{{ order.id }}</th>
+        <td>{{ order.get_date }}</td>
+        <td>{{ order.cart_total }}</td>
+        <td>{{ order.completed }}</td>
+        <td>Invoice</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock account-link %}

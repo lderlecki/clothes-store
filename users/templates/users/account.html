@@ -1,0 +1,50 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="header">
+        <h1>Your Account</h1>
+    </div>
+    <div class="account-container">
+        <section class="account-sidebar">
+            <div class="account-side-links">
+                <div class="account-link-container">
+                    <a href="{% url 'account-edit' %}" class="account-link nounderline">
+                        <span>
+                            <i class="fa fa-user"></i>
+                        </span>
+                        Personal Data
+                    </a>
+                </div>
+                <div class="account-link-container">
+                    <a href="{% url 'account-address' %}" class="account-link nounderline">
+                        <span>
+                            <i class="fas fa-address-book"></i>
+                        </span>
+                        Address
+                    </a>
+                </div>
+                <div class="account-link-container">
+                    <a href="{% url 'order-history' %}" class="account-link nounderline">
+                        <span>
+                            <i class="fas fa-history"></i>
+                        </span>
+                        Order History
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="account-content">
+            <div class="account-link-content">
+
+                {% block account-link %}
+                {% endblock account-link %}
+
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock content %}

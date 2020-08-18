@@ -1,0 +1,62 @@
+{% extends 'users/account.html' %}
+
+{% block account-link %}
+
+<h4 class="header nounderline">Personal Information</h4>
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="input-group">
+        <label class="input-group-label">First name</label>
+        {{ customer_form.first_name }}
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-label">Last name</label>
+        {{ customer_form.last_name }}
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-label">Email</label>
+        {{ customer_form.email }}
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-label">Phone</label>
+        {{ customer_form.phone }}
+    </div>
+
+    <h4 class="header nounderline">Change password</h4>
+
+    <div class="input-group">
+        <label class="input-group-label">Password</label>
+        {{ password_form.password }}
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-label">New password</label>
+        {{ password_form.new_password }}
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-label">Repeat password</label>
+        {{ password_form.confirm_password }}
+    </div>
+    <div class="account-btn-container">
+        <input class="submit-btn" type="submit" value="Save">
+    </div>
+    {% if password_form.errors %}
+        <div class="errors">
+            {% for field in password_form %}
+                {% for error in field.errors %}
+                    <p> {{ error }} </p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in password_form.non_field_errors %}
+                <p> {{ error }} </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</form>
+
+{% endblock account-link %}
