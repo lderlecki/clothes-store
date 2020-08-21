@@ -2,6 +2,19 @@
 
 {% block account-link %}
 
-    <h1>Address</h1>
+    <h4 class="header nounderline">Your addresses</h4>
+    {% for message in messages %}
+        <div class="message">
+            <span class="message-text">{{ message }}</span>
+        </div>
+    {% endfor %}
+    {% block address-content %}
+    {% endblock address-content %}
+    <div class="address-footer">
+        <a href="{% url 'address-add' %}">
+            <i class="fa fa-plus"></i>
+            <span>Add new address</span>
+        </a>
+    </div>
 
 {% endblock account-link %}

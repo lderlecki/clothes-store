@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from users.models import Customer
+from users.models import Customer, Address
 
 
 class CreateUserForm(UserCreationForm):
@@ -34,15 +34,6 @@ class CustomerDataForm(ModelForm):
     class Meta:
         model = Customer
         fields = ('first_name', 'last_name', 'email', 'phone',)
-
-    # def save(self, user):
-    #     customer = user.customer
-    #     first_name = self.cleaned_data['first_name']
-    #     last_name = self.cleaned_data['last_name']
-    #     phone = self.cleaned_data['phone']
-    #     email = self.cleaned_data['email']
-    #     user.set_password(password)
-    #     user.save()
 
 
 class SetNewPasswordForm(ModelForm):
@@ -83,3 +74,11 @@ class SetNewPasswordForm(ModelForm):
         password = self.cleaned_data['new_password']
         user.set_password(password)
         user.save()
+
+
+class AddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = ('name', 'first_name', 'last_name', 'company_name',
+                  'tax_number', 'street', 'number', 'zip_code', 'city',
+                  'country', 'phone', 'default')

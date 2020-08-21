@@ -928,8 +928,22 @@ body {
   Account
 -----------------------*/
 
+.message{
+    display: block;
+    background-color: #d4edda;
+    margin: .5rem .5rem 1rem .5rem;
+    padding: .75rem 1.25rem;
+    align-content: center;
+
+
+}
+
+.message-text{
+    position: relative;
+}
+
 .header {
-    margin: 5px 0 25px 0;
+    margin: 5px 0 15px 0;
     border-bottom: 1px solid lightslategray;
 }
 
@@ -1044,6 +1058,38 @@ body {
 .tbody {
     background-color: #ededed;
 }
+
+
+/*---------------------
+  Address
+-----------------------*/
+
+.address-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+
+.address-brick{
+    border: 1px solid #778899;
+    padding: 1rem;
+    margin: .5rem;
+    width: 30%;
+    max-width: 200px;
+    min-height: 200px;
+}
+
+.address-footer{
+    margin-top: 1rem;
+    margin-left: .5rem;
+
+}
+
+.checkbox{
+    padding: .5rem;
+}
+
 
 
 /*---------------------

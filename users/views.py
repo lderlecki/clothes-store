@@ -8,6 +8,7 @@ from .forms import (
     CreateUserForm,
     CustomerDataForm,
     SetNewPasswordForm,
+    AddressForm,
     )
 
 LOGIN_URL = '/customer/login/'
@@ -65,7 +66,7 @@ def editAccountView(request):
         data = request.POST
         customer_form = CustomerDataForm(data, instance=user.customer)
         if customer_form.is_valid():
-            instance = customer_form.save(user)
+            instance = customer_form.save()
             messages.success(request, 'Your data has been updated')
             if data['password']:
                 password_form = SetNewPasswordForm(data, user=user)
@@ -94,4 +95,32 @@ def orderHistoryView(request):
 
 @login_required(login_url='login')
 def addressAccountView(request):
-    return render(request, 'users/account-address.html')
+    customer = request.user.customer
+    addresses = customer.address_set.all()
+    context = {
+        'addresses': addresses
+    }
+
+    return render(request, 'users/account-address-list.html', context)
+
+
+def addressAddView(request):
+    customer = request.user.customer
+    address_form = AddressForm(instance=customer)
+    if request.method == 'POST':
+        data = request.POST
+        address_form = AddressForm(data)
+        if address_form.is_valid():
+            address = address_form.save(commit=False)
+            address.customer = customer
+            # TODO: Check whether the new address is set to default,
+            #       if so change the existing default address to False
+            address.save()
+            messages.success(request, 'You have added a new address')
+        return redirect('address-list')
+
+    context = {
+        'address_form': address_form,
+    }
+
+    return render(request, 'users/add-address.html', context)

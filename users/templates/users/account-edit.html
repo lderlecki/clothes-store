@@ -3,6 +3,11 @@
 {% block account-link %}
 
 <h4 class="header nounderline">Personal Information</h4>
+{% for message in messages %}
+    <div class="message">
+        <span class="message-text">{{ message }}</span>
+    </div>
+{% endfor %}
 <form method="POST" action="">
     {% csrf_token %}
     <div class="input-group">

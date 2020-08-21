@@ -1,0 +1,88 @@
+{% extends 'users/account-address.html' %}
+{% load static %}
+
+{% block address-content %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="input-group">
+                <label class="input-group-label">Address name</label>
+                {{ address_form.name }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">First name</label>
+                {{ address_form.first_name }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Last name</label>
+                {{ address_form.last_name }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Company name</label>
+                {{ address_form.company_name }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Tax number</label>
+                {{ address_form.tax_number }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Street</label>
+                {{ address_form.street }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Number</label>
+                {{ address_form.number }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Zip code</label>
+                {{ address_form.zip_code }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">City</label>
+                {{ address_form.city }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Country</label>
+                {{ address_form.country }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Phone number</label>
+                {{ address_form.phone }}
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-label">Set as default</label>
+                <div class="checkbox">
+                    {{ address_form.default }}
+                </div>
+            </div>
+            <div class="account-btn-container">
+                <input class="submit-btn" type="submit" value="Save">
+            </div>
+
+            {% if address_form.errors %}
+                <div class="errors">
+                    {% for field in address_form %}
+                        {% for error in field.errors %}
+                            <p> {{ error }} </p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in address_form.non_field_errors %}
+                        <p> {{ error }} </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </form>
+
+{% endblock address-content %}
+
