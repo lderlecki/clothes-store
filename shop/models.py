@@ -28,9 +28,11 @@ class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Category Name')
     image = models.ImageField(default='product_placeholder.png', null=True, blank=True)
 
-
     def __str__(self):
         return self.name
+
+    def get_man_categories(self):
+        cat = self.pr
 
 
 class Brand(models.Model):
@@ -72,5 +74,6 @@ class Product(models.Model):
 
 
 class ProductImages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='product_images')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True,
+                                related_name='product_images')
     image = models.ImageField(upload_to=get_image_path, verbose_name='Image')

@@ -9,8 +9,8 @@ from users import views as user_views
 urlpatterns = [
     path('', views.home, name='home'),
     path('store/', views.store_main, name='store-main'),
-    path('store/man/', views.store_man, name='store-man'),
-    path('store/woman/', views.store_woman, name='store-woman'),
+    path('store/<str:gender>/', views.store_detail, name='store'),
+    path('store/<str:gender>/<str:category>/', views.store_detail, name='store-category'),
     path('product/<str:pk>/', views.product, name='product-detail'),
     path('cart/', include('carts.urls')),
     path('customer/', include('users.urls')),

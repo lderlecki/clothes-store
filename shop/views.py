@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from .models import (
         Product,
+        Category
     )
 
 
-# Create your views here.
 def home(request):
-    return render(request, 'shop/pages/index.html')
+    categories = Category.objects.all()
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'shop/pages/index.html', context)
 
 
 def store_main(request):
@@ -17,16 +21,12 @@ def store_main(request):
     return render(request, 'shop/pages/store.html', context)
 
 
-def store_man(request):
-    products = Product.objects.filter(gender='man')
-    context = {
-        'products': products,
-    }
-    return render(request, 'shop/pages/store.html', context)
+def store_detail(request, gender, category=None):
+    if category:
+        products = Product.objects.filter(gender=gender, category__name=category)
+    else:
+        products = Product.objects.filter(gender=gender)
 
-
-def store_woman(request):
-    products = Product.objects.filter(gender='woman')
     context = {
         'products': products,
     }
