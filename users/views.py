@@ -113,7 +113,8 @@ def addressAddView(request):
         if address_form.is_valid():
             address = address_form.save(commit=False)
             address.customer = customer
-            # TODO: Check whether the new address is set to default,
+            # TODO: Check whether the new address is set to default
+            #       (billing and shipping separately),
             #       if so change the existing default address to False
             address.save()
             messages.success(request, 'You have added a new address')

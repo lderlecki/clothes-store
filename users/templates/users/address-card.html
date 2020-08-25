@@ -1,0 +1,23 @@
+{% load static %}
+
+
+<div class="address-header">
+    <span class="radio-btn">
+        <input type="radio" value="{{ address.id }}">
+    </span>
+    <span>{{ address.name }}</span>
+</div>
+<div class="address-content">
+    <h6>{{ address.customer }}</h6>
+    {% if address.company_name %}
+        <h6>{{ address.company_name }}</h6>
+        {% if address.tax_number %}
+            <h6>{{ address.tax_number }}</h6>
+        {% endif %}
+    {% endif %}
+    <h6>{{ address.street }} {{ address.number }}</h6>
+    <h6>{{ address.zip_code }} {{ address.city }}</h6>
+    <h6>{{ address.country }}</h6>
+    <h6>{{ address.customer.phone }}</h6>
+</div>
+

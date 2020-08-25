@@ -17,11 +17,7 @@
                             <div class="address-brick" id="delivery-address-{{ address.id }}">
                                 <div class="address-header">
                                     <span class="radio-btn">
-                                        {% if address.default %}
-                                            <input type="radio" name="address-delivery" value="{{ address.id }}" checked>
-                                        {% else %}
-                                            <input type="radio" name="address-delivery" value="{{ address.id }}">
-                                        {% endif %}
+                                        <input type="radio" name="address-delivery" value="{{ address.id }}">
                                     </span>
                                     <span>{{ address.name }}</span>
                                 </div>
@@ -41,26 +37,14 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="address-footer">
-                        <a href="{% url 'address-add' %}">
-                            <i class="fa fa-plus"></i>
-                            <span>Add new address</span>
-                        </a>
-                    </div>
                     <br>
                     <h2 class="sub-header">Invoice address</h2>
                     <div class="address-selector" id="invoice-address">
                         {% for address in addresses %}
-
                             <div class="address-brick" id="invoice-address-{{ address.id }}">
                                 <div class="address-header">
                                     <span class="radio-btn">
-                                        {% if address.default %}
-                                            <input type="radio" name="address-invoice" value="{{ address.id }}" checked>
-                                        {% else %}
-                                            <input type="radio" name="address-invoice" value="{{ address.id }}">
-                                        {% endif %}
-
+                                        <input type="radio" name="address-invoice" value="{{ address.id }}">
                                     </span>
                                     <span>{{ address.name }}</span>
                                 </div>
@@ -79,15 +63,10 @@
                                 </div>                            </div>
                         {% endfor %}
                     </div>
-                    <div class="address-footer">
-                        <a href="{% url 'address-add' %}">
-                            <i class="fa fa-plus"></i>
-                            <span>Add new address</span>
-                        </a>
-                    </div>
                     <div class="justify-center">
                         <input class="proceed-btn" id="checkout-proceed" type="submit" value="Proceed" disabled>
                     </div>
+
                 </form>
 
             </section>

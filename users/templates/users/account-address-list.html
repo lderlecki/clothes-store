@@ -5,18 +5,21 @@
     <div class="address-container">
         {% for address in addresses %}
             <div class="address-brick">
-                <h4>{{ address.name }}</h4>
-                <h6>{{ address.customer }}</h6>
-                {% if address.company_name %}
-                    <h6>{{ address.company_name }}</h6>
-                    {% if address.tax_number %}
-                        <h6>{{ address.tax_number }}</h6>
+                <div class="address-content">
+                    <h4>{{ address.name }}</h4>
+                    <hr>
+                    <h6>{{ address.customer }}</h6>
+                    {% if address.company_name %}
+                        <h6>{{ address.company_name }}</h6>
+                        {% if address.tax_number %}
+                            <h6>{{ address.tax_number }}</h6>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                <h6>{{ address.street }} {{ address.number }}</h6>
-                <h6>{{ address.zip_code }}  {{ address.city }}</h6>
-                <h6>{{ address.country }}</h6>
-                <h6>{{ address.customer.phone }}</h6>
+                    <h6>{{ address.street }} {{ address.number }}</h6>
+                    <h6>{{ address.zip_code }} {{ address.city }}</h6>
+                    <h6>{{ address.country }}</h6>
+                    <h6>{{ address.customer.phone }}</h6>
+                </div>
             </div>
         {% endfor %}
     </div>

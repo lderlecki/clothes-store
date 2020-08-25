@@ -31,9 +31,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_man_categories(self):
-        cat = self.pr
-
 
 class Brand(models.Model):
     name = models.CharField(max_length=100, verbose_name='Brand Name')

@@ -27,11 +27,11 @@ class Customer(models.Model):
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=100, default='Default')
+    name = models.CharField(max_length=100, default='My address')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
-    first_name = models.CharField(max_length=100, default='Default')
-    last_name = models.CharField(max_length=100, default='Default')
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
 
     street = models.CharField(max_length=100)

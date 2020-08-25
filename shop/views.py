@@ -1,4 +1,8 @@
 from django.shortcuts import render
+
+from carts.models import Cart
+from orders.models import Order
+from users.models import Customer
 from .models import (
         Product,
         Category
@@ -6,11 +10,7 @@ from .models import (
 
 
 def home(request):
-    categories = Category.objects.all()
-    context = {
-        'categories': categories,
-    }
-    return render(request, 'shop/pages/index.html', context)
+    return render(request, 'shop/pages/index.html')
 
 
 def store_main(request):
@@ -43,11 +43,15 @@ def product(request, pk):
     return render(request, 'shop/pages/product.html', context)
 
 
-def cart(request):
-    context = {}
-    return render(request, 'shop/pages/cart.html', context)
+def dashboard(request):
+    customers = Customer.objects.all()
+    orders = Order.objects.all()
+    delivered = orders.filter(status='delivered').count()
 
-
-def checkout(request):
-    context = {}
-    return render(request, 'shop/pages/checkout.html', context)
+    context = {
+        'customers': customers,
+        'orders': orders,
+        'delivered': delivered,
+        'orders_total': orders.count(),
+    }
+    return render(request, 'shop/pages/admin-dashboard.html', context)

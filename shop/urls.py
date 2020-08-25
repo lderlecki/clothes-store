@@ -12,6 +12,9 @@ urlpatterns = [
     path('store/<str:gender>/', views.store_detail, name='store'),
     path('store/<str:gender>/<str:category>/', views.store_detail, name='store-category'),
     path('product/<str:pk>/', views.product, name='product-detail'),
+
+    path('dashboard/', views.dashboard, name='admin-dashboard'),
+
     path('cart/', include('carts.urls')),
     path('customer/', include('users.urls')),
 

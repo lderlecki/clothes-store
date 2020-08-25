@@ -32,7 +32,7 @@ class Cart(models.Model):
     cart_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return self.cart_id
+        return f'{self.customer} {self.cart_id}'
 
     @property
     def items_number(self):
