@@ -5,6 +5,10 @@ body {
     font-family: 'Crimson Text', serif;
 }
 
+.bold{
+    font-weight: bold;
+}
+
 .container {
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -590,7 +594,6 @@ body {
 }
 
 .cart-return {
-    display: flex;
     padding-top: 1%;
 }
 
@@ -645,7 +648,9 @@ body {
     position: relative;
     width: 100%;
     height: 25px;
-    margin-bottom: 20px;
+    padding: .1rem;
+
+    white-space: nowrap;
 }
 
 .cart-header span {
@@ -654,10 +659,11 @@ body {
 }
 
 .col-placeholder {
-    width: 18% !important;
+    opacity: 0;
 }
 
 .cart-items {
+    width: 100%;
     padding: .1rem;
 }
 
@@ -670,10 +676,9 @@ body {
 
 .cart-col {
     display: inline-block;
-    margin-left: 5px;
-    margin-right: 5px;
-    height: 100%;
-    width: 16%;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    width: 15%;
 }
 
 .price {
@@ -681,7 +686,6 @@ body {
 }
 
 .col-image {
-    width: 18% !important;
     text-align: center;
 
 }
@@ -819,7 +823,14 @@ body {
     background-color: gray;
 }
 
-.order-summary {
+.order-completed .cart-summary{
+    width: 100%;
+}
+.order-completed .cart-summary .cart-col{
+    width: 24%;
+}
+
+.cart-summary {
     position: relative;
     width: 45%;
     min-height: 600px;
@@ -833,10 +844,53 @@ body {
     text-align: right;
 }
 
+#delete-icon{
+    color: red;
+}
+
 .items-checkout {
     height: auto;
     overflow: auto;
 }
+
+#checkout-proceed{
+    border-radius: 0!important;
+    font-size: 20px;
+    height: 50px;
+    width: 100% !important;
+}
+
+.order-completed{
+    position: relative;
+    align-content: center;
+}
+
+.order-summary {
+    position: relative;
+    width: 100%;
+    background-color: #fbfbff;
+    padding: 10px;
+}
+
+.order-addresses{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.payment-container{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    margin: 0 25%;
+    width: 50%;
+}
+
+.payment-container colu{
+    width: 24%;
+}
+
 
 @media (max-width: 900px) {
     .checkout-wrapper {
@@ -948,15 +1002,20 @@ body {
   Account
 -----------------------*/
 
-.message {
+.messages {
     display: block;
+    width: 50%;
     background-color: #d4edda;
-    margin: .5rem .5rem 1rem .5rem;
-    padding: .75rem 1.25rem;
+    margin: .5rem 25% 0 25%;
     align-content: center;
-
-
 }
+
+.warning{
+    text-align: center;
+    padding: .75rem 1.25rem;
+    background-color: lightcoral;
+}
+
 
 .message-text {
     position: relative;
@@ -1046,7 +1105,9 @@ body {
 
 }
 
-/* Order History */
+/*---------------------
+  Order History
+-----------------------*/
 
 .order-container {
     display: table;
@@ -1087,17 +1148,27 @@ body {
 }
 
 .address-container {
+    justify-content: space-between;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 
+
+}
+
+.address-container .address-brick{
+    flex: 0 0 26%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .address-brick {
     display: block;
-    flex: 0 0 49%;
+    flex: 0 0 40%;
     border: 1px solid #778899;
     margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 5px;
     box-shadow: 1px 1px 1px 1px rgba(163, 163, 163, 1);
     min-width: 150px;
@@ -1164,6 +1235,10 @@ table .btn {
 
 
 #orders-delivered {
+    background-color: #2E8B57;
+}
+
+#orders-started {
     background-color: #7abecc;
 }
 

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
@@ -18,7 +19,7 @@ def cart_view(request):
             items = cart.cartitem_set.all()
 
         except ObjectDoesNotExist:
-            messages.warning(request, "You do not have an active order")
+            messages.warning(request, "Yor cart is empty")
             return redirect('store-main')
 
     else:
@@ -34,56 +35,6 @@ def cart_view(request):
     }
 
     return render(request, 'shop/pages/cart.html', context)
-
-
-class CheckoutView(View):
-    def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            customer = self.request.user.customer
-            try:
-                cart = Cart.objects.get(customer=customer, completed=False)
-                addresses = customer.address_set.all().order_by('-id')
-                items = cart.cartitem_set.all()
-
-            except ObjectDoesNotExist:
-                messages.warning(self.request, "You do not have an active order")
-                return redirect('store-main')
-        else:
-            return redirect('login')
-            # items = []
-            # addresses = []
-            # cart = {
-            #     'items_number': 0,
-            #     'cart_total': 0,
-            # }
-        context = {
-            'items': items,
-            'cart': cart,
-            'addresses': addresses,
-        }
-        return render(self.request, 'shop/pages/checkout.html', context)
-
-    def post(self, *args, **kwargs):
-        data = self.request.POST
-        customer = self.request.user.customer
-        try:
-            cart = Cart.objects.get(customer=customer, completed=False)
-            order, created = Order.objects.get_or_create(customer=customer, cart=cart)
-            delivery_address = data['address-delivery']
-            invoice_address = data['address-invoice']
-            # TODO:
-            #  Change order id when order is completed not when it's changed
-            # order.order_id = generate_order_id(id=order.id)
-
-            order.shipping_address = customer.address_set.get(id=delivery_address)
-            order.invoice_address = customer.address_set.get(id=invoice_address)
-            order.save()
-
-            return redirect('checkout-confirm')
-
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect('store-main')
 
 
 def add_to_cart(request):
@@ -102,6 +53,8 @@ def add_to_cart(request):
         cart_product.quantity += 1
     elif action == 'remove':
         cart_product.quantity -= 1
+    elif action == 'delete':
+        cart_product.quantity = 0
 
     cart_product.save()
     if cart_product.quantity <= 0:
@@ -127,3 +80,85 @@ def get_cart_data(request):
             }
             return JsonResponse(context, safe=False)
     return Http404
+
+
+class CheckoutView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            try:
+                cart = Cart.objects.get(customer=customer, completed=False)
+                if cart.items_number <= 0:
+                    messages.warning(self.request, "Your cart is empty. Please add products to checkout")
+                    return redirect('cart')
+                addresses = customer.address_set.all().order_by('-id')
+                items = cart.cartitem_set.all()
+
+            except ObjectDoesNotExist:
+                messages.warning(self.request, "You do not have any items in cart")
+                return redirect('store-main')
+        else:
+            return redirect('login')
+            # items = []
+            # addresses = []
+            # cart = {
+            #     'items_number': 0,
+            #     'cart_total': 0,
+            # }
+        context = {
+            'items': items,
+            'cart': cart,
+            'addresses': addresses,
+        }
+        return render(self.request, 'shop/pages/checkout.html', context)
+
+    def post(self, *args, **kwargs):
+        data = self.request.POST
+        customer = self.request.user.customer
+        cart = Cart.objects.get(customer=customer, completed=False)
+        try:
+            if cart.items_number > 0:
+                order, created = Order.objects.get_or_create(customer=customer, cart=cart)
+                delivery_address = data['address-delivery']
+                invoice_address = data['address-invoice']
+
+                if created:
+                    order.order_id = generate_order_id(id=order.id)
+
+                order.shipping_address = customer.address_set.get(id=delivery_address)
+                order.invoice_address = customer.address_set.get(id=invoice_address)
+                order.save()
+                self.request.session['order'] = order
+                #
+                # # cart.completed = True
+                # # cart.save()
+
+                # return render(self.request, 'shop/pages/checkout-confirmation.html', context)
+                return redirect('checkout-confirm')
+            else:
+                messages.warning(self.request, "Your cart is empty. Add some products then proceed to checkout")
+                return redirect('store-main')
+
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect('store-main')
+
+
+class CheckoutCompleted(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(customer=self.request.user.customer, cart__completed=False)
+            order.cart.completed = True
+            items = order.cart.cartitem_set.all()
+            # order.cart.save()
+
+            context = {
+                'order': order,
+                'items': items,
+            }
+            return render(self.request, 'shop/pages/order-completed.html', context)
+
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect('store-main')
+

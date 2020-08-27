@@ -1,0 +1,82 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="container-fluid">
+        <div class="order-completed">
+            <div class="header" style="text-align: center">
+                <h4>Order {{ order.order_id }} created. Thank you!</h4>
+                <h4>You can find your payment details below.</h4>
+            </div>
+            <div class="order-summary">
+                <div class="payment-container">
+                    <div class="colu">
+                        <h6>Total:</h6>
+                        <h6>Recipient:</h6>
+                        <h6>Address:</h6>
+                        <h6>Bank account:</h6>
+                        <h6>Transfer title:</h6>
+                    </div>
+                    <div class="colu">
+                        <h6 class="bold">{{ order.cart.cart_total }}PLN</h6>
+                        <h6 class="bold">ClothesApp Sp. z o.o.</h6>
+                        <h6 class="bold">Babimojska 7 60-161 Poznan</h6>
+                        <h6 class="bold">61 1090 1014 0000 0712 1981 2874</h6>
+                        <h6 class="bold">{{ order.order_id }} {{ order.customer }}</h6>
+                    </div>
+
+
+
+                </div>
+
+                <div class="order-addresses">
+                    {% for address in order.get_addresses %}
+                        <div class="{{ address.address_type }}">
+                            {% include 'users/address-card.html' %}
+                        </div>
+
+                    {% endfor %}
+                    
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="cart-header">
+                    <div class="cart-col col-placeholder"><span>img</span></div><!--
+                    --><div class="cart-col"><span>Item</span></div><!--
+                    --><div class="cart-col"><span>Quantity</span></div><!--
+                    --><div class="cart-col"><span>Total</span></div>
+                </div>
+                <hr>
+                {% for item in items %}
+                    <div class="cart-item-row">
+                        <div class="cart-col col-image">
+                            <img class="cart-image-preview" src="{{ item.product.image_preview.url }}" alt="">
+                        </div>
+                        <div class="cart-col">
+                            <span>{{ item.product.name }}</span>
+                        </div>
+                        <div class="cart-col">
+                            <div class="quantity">
+                                <span style="margin: auto 10px; text-align: right">{{ item.quantity }}</span>
+                            </div>
+                        </div>
+                        <div class="cart-col price">
+                            <span>{{ item.item_total }}</span><span>PLN</span>
+                        </div>
+
+
+                    </div>
+                {% endfor %}
+                <hr>
+                <div class="cart-col price" style="float: right; padding-left: .5rem">
+                    <span>{{ order.cart.cart_total }}</span><span>PLN</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}
+

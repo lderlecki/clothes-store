@@ -40,7 +40,7 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
 
-    address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
+    address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES, default='S')
     default = models.BooleanField(default=False)
 
     company_name = models.CharField(max_length=200, blank=True, null=True)
@@ -50,5 +50,13 @@ class Address(models.Model):
         return f'{self.first_name} {self.last_name} {self.name}'
 
     @property
-    def get_default(self):
+    def get_default(self, address_type=None):
+        if address_type:
+            return self.customer.address_set.filter(default=True, address_type=address_type)
         return self.customer.address_set.filter(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            Address.objects.filter(customer=self.customer, default=True, address_type=self.address_type).update(default=False)
+        super(Address, self).save(*args, **kwargs)
+

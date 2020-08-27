@@ -36,7 +36,7 @@
                     </div>
                     <input type="submit" value="Register account">
                 </form>
-
+                <span>Already have an account? <a href="{% url 'login' %}">Login</a></span>
                 {% if form.errors %}
                     <div class="errors">
                         {% for field in form %}

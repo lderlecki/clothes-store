@@ -81,4 +81,4 @@ class AddressForm(ModelForm):
         model = Address
         fields = ('name', 'first_name', 'last_name', 'company_name',
                   'tax_number', 'street', 'number', 'zip_code', 'city',
-                  'country', 'phone', 'default')
+                  'country', 'phone', 'default', 'address_type')

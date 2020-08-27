@@ -21,6 +21,7 @@ $('.update-cart').on('click', function (){
                 type: 'GET',
                 success: function(data){
                     $('#cart-total').text(data['cart_items']);
+                    $('#cart-items-number').text(data['cart_items']);
                     $('#cart-total-price').text(data['cart_total']);
                 }
             })

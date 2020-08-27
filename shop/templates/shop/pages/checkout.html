@@ -17,7 +17,7 @@
                             <div class="address-brick" id="delivery-address-{{ address.id }}">
                                 <div class="address-header">
                                     <span class="radio-btn">
-                                        {% if address.default %}
+                                        {% if address.default and address.address_type == 'S'%}
                                             <input type="radio" name="address-delivery" value="{{ address.id }}" checked>
                                         {% else %}
                                             <input type="radio" name="address-delivery" value="{{ address.id }}">
@@ -47,15 +47,14 @@
                             <span>Add new address</span>
                         </a>
                     </div>
-                    <br>
+                    <hr>
                     <h2 class="sub-header">Invoice address</h2>
                     <div class="address-selector" id="invoice-address">
                         {% for address in addresses %}
-
                             <div class="address-brick" id="invoice-address-{{ address.id }}">
                                 <div class="address-header">
                                     <span class="radio-btn">
-                                        {% if address.default %}
+                                        {% if address.default and address.address_type == 'B'%}
                                             <input type="radio" name="address-invoice" value="{{ address.id }}" checked>
                                         {% else %}
                                             <input type="radio" name="address-invoice" value="{{ address.id }}">
@@ -85,15 +84,16 @@
                             <span>Add new address</span>
                         </a>
                     </div>
+                    <hr>
                     <div class="justify-center">
-                        <input class="proceed-btn" id="checkout-proceed" type="submit" value="Proceed" disabled>
+                        <input class="proceed-btn" id="checkout-proceed" type="submit" value="Order with the obligation to pay" disabled>
                     </div>
                 </form>
 
             </section>
 
 
-            <section class="order-summary">
+            <section class="cart-summary">
                 <a class="btn btn-warning" href="{% url 'cart' %}">Back to cart</a>
                 <hr>
                 <div class="order-details">

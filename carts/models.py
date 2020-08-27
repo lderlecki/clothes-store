@@ -32,7 +32,7 @@ class Cart(models.Model):
     cart_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return f'{self.customer} {self.cart_id}'
+        return f'{self.cart_id}'
 
     @property
     def items_number(self):
@@ -49,16 +49,3 @@ class Cart(models.Model):
     @property
     def get_date(self):
         return self.date_ordered.strftime('%Y-%m-%d')
-
-
-class ShippingAddress(models.Model):
-    customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.SET_NULL)
-    cart = models.ForeignKey(Cart, blank=True, null=True, on_delete=models.SET_NULL)
-    address = models.CharField(max_length=200, null=True)
-    city = models.CharField(max_length=200, null=True)
-    state = models.CharField(max_length=200, null=True)
-    zipcode = models.CharField(max_length=200, null=True)
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.address

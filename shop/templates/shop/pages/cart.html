@@ -8,7 +8,7 @@
             <section class="cart-info-wrapper">
                 <div class="cart-info">
                     <div class="cart-return">
-                        <button>Continue shopping</button>
+                        <a class="btn btn-warning" href="{% url 'store-main' %}">Continue shopping</a>
                     </div>
                     <div class="cart-detail">
                         <div class="items-counter">
@@ -18,7 +18,7 @@
                             <span>Total: <span id="cart-total-price"  class="price">{{ cart.cart_total }}</span>PLN</span>
                         </div>
                         <div class="cart-checkout">
-                            <a href="{% url 'checkout' %}">Checkout</a>
+                            <a class="btn btn-info" href="{% url 'checkout' %}">Checkout</a>
                         </div>
                     </div>
                 </div>
@@ -26,11 +26,13 @@
 
             <section class="cart">
                 <div class="cart-header">
-                    <div class="cart-col col-placeholder"><span></span></div>
-                    <div class="cart-col"><span>Item</span></div>
-                    <div class="cart-col"><span>Price</span></div>
-                    <div class="cart-col"><span>Quantity</span></div>
-                    <div class="cart-col"><span>Total</span></div>
+                    <div class="cart-col col-placeholder"><span>img</span></div><!--
+                    --><div class="cart-col"><span>Item</span></div><!--
+                    --><div class="cart-col"><span>Price</span></div><!--
+                    --><div class="cart-col"><span>Quantity</span></div><!--
+                    --><div class="cart-col"><span>Total</span></div><!--
+                    --><div class="cart-col col-placeholder"><span>delete</span></div>
+
                 </div>
                 <hr>
                 <div class="cart-items">
@@ -47,10 +49,14 @@
                             </div>
                             <div class="cart-col">
                                 <div class="quantity">
-                                    <span style="margin: auto 10px" id="product-quantity-{{ item.product.id }}">{{ item.quantity }}</span>
+                                    <span style="margin: auto 10px; text-align: right" id="product-quantity-{{ item.product.id }}">{{ item.quantity }}</span>
                                     <div class="quantity-arrows">
-                                        <img data-product='{{ item.product.id }}' data-action="add" class="change-quantity update-cart" src="{% static 'shop/images/arrow_up.png' %}">
-                                        <img data-product='{{ item.product.id }}' data-action="remove" class="change-quantity update-cart" src="{% static 'shop/images/arrow_down.png' %}">
+                                        <img data-product='{{ item.product.id }}'
+                                             data-action="add" class="change-quantity update-cart"
+                                             src="{% static 'shop/images/arrow_up.png' %}">
+                                        <img data-product='{{ item.product.id }}'
+                                             data-action="remove" class="change-quantity update-cart"
+                                             src="{% static 'shop/images/arrow_down.png' %}">
                                     </div>
                                 </div>
 
@@ -58,10 +64,16 @@
                             <div class="cart-col price">
                                 <span id="item-total-{{ item.product.id }}">{{ item.item_total }}</span><span>PLN</span>
                             </div>
+                            <div class="cart-col ">
+                                <a data-product='{{ item.product.id }}'
+                                   data-action="delete" class="update-cart"
+                                   href="#">
+                                    <i id="delete-icon" class="fas fa-times"></i>
+                                </a>
+                            </div>
+
                         </div>
                     {% endfor %}
-                    
-
                 </div>
             </section>
         </div>

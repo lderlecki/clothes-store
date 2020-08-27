@@ -32,7 +32,9 @@
 
     <div class="form-inline my-2 my-lg-0" id="nav-right">
         {% if user.is_authenticated %}
-            <a href="{% url 'admin-dashboard' %}"class="btn btn-warning">Admin</a>
+            {% if user.is_staff %}
+                <a href="{% url 'admin-dashboard' %}"class="btn btn-warning">Admin</a>
+            {% endif %}
             <a href="{% url 'account' %}"class="btn btn-warning">Account</a>
             <a href="{% url 'logout' %}"class="btn btn-warning">Logout</a>
         {% else %}
@@ -42,7 +44,11 @@
             <img  id="cart-icon" src="{% static 'shop/images/cart.png' %}">
         </a>
         <p id="cart-total">
-            {{ user.customer.total_cart_items }}
+            {% if user.customer.total_cart_items %}
+                {{ user.customer.total_cart_items }}
+            {% else %}
+                0
+            {% endif %}
         </p>
     </div>
 </nav>

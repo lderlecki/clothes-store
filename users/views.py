@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from carts.models import Cart
+from orders.models import Order
 from .forms import (
     CreateUserForm,
     CustomerDataForm,
@@ -85,7 +86,7 @@ def editAccountView(request):
 @login_required(login_url='login')
 def orderHistoryView(request):
     customer = request.user.customer
-    orders = Cart.objects.all()
+    orders = Order.objects.filter(customer=customer, cart__completed=True)
 
     context = {
         'orders': orders,
@@ -113,9 +114,6 @@ def addressAddView(request):
         if address_form.is_valid():
             address = address_form.save(commit=False)
             address.customer = customer
-            # TODO: Check whether the new address is set to default
-            #       (billing and shipping separately),
-            #       if so change the existing default address to False
             address.save()
             messages.success(request, 'You have added a new address')
         return redirect('address-list')

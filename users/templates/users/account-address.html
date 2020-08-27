@@ -3,11 +3,7 @@
 {% block account-link %}
 
     <h4 class="header nounderline">Your addresses</h4>
-    {% for message in messages %}
-        <div class="message">
-            <span class="message-text">{{ message }}</span>
-        </div>
-    {% endfor %}
+
     {% block address-content %}
     {% endblock address-content %}
     <div class="address-footer">

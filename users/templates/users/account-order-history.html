@@ -12,10 +12,10 @@
     </tr>
 {% for order in orders %}
     <tr class="tbody">
-        <th>{{ order.id }}</th>
+        <th>{{ order.order_id }}</th>
         <td>{{ order.get_date }}</td>
-        <td>{{ order.cart_total }}</td>
-        <td>{{ order.completed }}</td>
+        <td>{{ order.cart.cart_total }}</td>
+        <td>{{ order.status }}</td>
         <td>Invoice</td>
     </tr>
 {% endfor %}

@@ -1,13 +1,14 @@
 {% load static %}
 
-
-<div class="address-header">
-    <span class="radio-btn">
-        <input type="radio" value="{{ address.id }}">
-    </span>
-    <span>{{ address.name }}</span>
-</div>
 <div class="address-content">
+    <h4>
+        {% if address.address_type == 'S' %}
+            Shipping address
+        {% elif address.address_type == 'B'%}
+            Invoice address
+        {% endif %} {{ address.name }}
+    </h4>
+    <hr>
     <h6>{{ address.customer }}</h6>
     {% if address.company_name %}
         <h6>{{ address.company_name }}</h6>
