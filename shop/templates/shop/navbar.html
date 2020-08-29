@@ -44,10 +44,12 @@
             <img  id="cart-icon" src="{% static 'shop/images/cart.png' %}">
         </a>
         <p id="cart-total">
-            {% if user.customer.total_cart_items %}
-                {{ user.customer.total_cart_items }}
-            {% else %}
-                0
+            {% if user.is_authenticated %}
+                {% if user.customer.total_cart_items %}
+                    {{ user.customer.total_cart_items }}
+                {% else %}
+                    0
+                {% endif %}
             {% endif %}
         </p>
     </div>

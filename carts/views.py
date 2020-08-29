@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,14 +23,38 @@ def cart_view(request):
         except ObjectDoesNotExist:
             messages.warning(request, "Yor cart is empty")
             return redirect('store-main')
-
     else:
+        try:
+            cart_cookie = json.loads(request.COOKIES['cart'])
+        except:
+            cart_cookie = {}
+
         items = []
         cart = {
             'items_number': 0,
             'cart_total': 0,
+            'completed': False
         }
 
+        for i in cart_cookie:
+            qty = cart_cookie[i]['quantity']
+            product = Product.objects.get(id=i)
+            item_total = product.total_price * qty
+
+            cart['items_number'] += qty
+            cart['cart_total'] += item_total
+
+            item = {
+                'product': {
+                    'id': product.id,
+                    'name': product.name,
+                    'total_price': product.total_price,
+                    'image_preview': product.image_preview,
+                },
+                'quantity': qty,
+                'item_total': item_total,
+            }
+            items.append(item)
     context = {
         'items': items,
         'cart': cart,
@@ -39,32 +65,50 @@ def cart_view(request):
 
 def add_to_cart(request):
     product_id = request.POST['productId']
-    action = request.POST['action']
 
-    customer = request.user.customer
-    product = Product.objects.get(id=product_id)
-    cart, created = Cart.objects.get_or_create(customer=customer, completed=False)
-    if created:
-        cart.cart_id = generate_order_id(cart.id)
-        cart.save()
-    cart_product, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if request.user.is_authenticated:
+        action = request.POST['action']
+        customer = request.user.customer
+        product = Product.objects.get(id=product_id)
+        cart, created = Cart.objects.get_or_create(customer=customer, completed=False)
+        if created:
+            cart.cart_id = generate_order_id(cart.id)
+            cart.save()
+        cart_product, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-    if action == 'add':
-        cart_product.quantity += 1
-    elif action == 'remove':
-        cart_product.quantity -= 1
-    elif action == 'delete':
-        cart_product.quantity = 0
+        if action == 'add':
+            cart_product.quantity += 1
+        elif action == 'remove':
+            cart_product.quantity -= 1
+        elif action == 'delete':
+            cart_product.quantity = 0
 
-    cart_product.save()
-    if cart_product.quantity <= 0:
-        cart_product.delete()
+        cart_product.save()
+        if cart_product.quantity <= 0:
+            cart_product.delete()
+        context = {
+            'product_qty': cart_product.quantity,
+            'product_total': cart_product.item_total,
+            'cart_items': cart.items_number
+        }
 
-    context = {
-        'product_qty': cart_product.quantity,
-        'product_total': cart_product.item_total,
-        'cart_items': cart.items_number
-    }
+    else:
+        try:
+            cart_cookie = json.loads(request.COOKIES['cart'])
+        except:
+            cart_cookie = {}
+        if len(cart_cookie) > 0:
+
+            pass
+        else:
+            product_qty = 0
+            product_total = 0
+            cart_items = 0
+        context = {
+            'product_qty': product_qty,
+            'product_total': product_total,
+            'cart_items': cart_items
+        }
     return JsonResponse(context, safe=False)
 
 
@@ -128,12 +172,11 @@ class CheckoutView(LoginRequiredMixin, View):
                 order.shipping_address = customer.address_set.get(id=delivery_address)
                 order.invoice_address = customer.address_set.get(id=invoice_address)
                 order.save()
-                self.request.session['order'] = order
-                #
-                # # cart.completed = True
-                # # cart.save()
+                self.request.session['order_id'] = order.order_id
 
-                # return render(self.request, 'shop/pages/checkout-confirmation.html', context)
+                # cart.completed = True
+                # cart.save()
+
                 return redirect('checkout-confirm')
             else:
                 messages.warning(self.request, "Your cart is empty. Add some products then proceed to checkout")
@@ -147,10 +190,9 @@ class CheckoutView(LoginRequiredMixin, View):
 class CheckoutCompleted(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(customer=self.request.user.customer, cart__completed=False)
-            order.cart.completed = True
+            print(self.request.session['order_id'])
+            order = Order.objects.get(order_id=self.request.session['order_id'])
             items = order.cart.cartitem_set.all()
-            # order.cart.save()
 
             context = {
                 'order': order,
@@ -161,4 +203,3 @@ class CheckoutCompleted(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect('store-main')
-
