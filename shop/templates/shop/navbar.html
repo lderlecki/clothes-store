@@ -50,6 +50,12 @@
                 {% else %}
                     0
                 {% endif %}
+            {% else %}
+                {% if request.session.total_cart_items %}
+                    {{ request.session.total_cart_items }}
+                {% else %}
+                    0
+                {% endif %}
             {% endif %}
         </p>
     </div>
