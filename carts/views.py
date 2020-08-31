@@ -140,8 +140,8 @@ class CheckoutView(View):
                 context = {
                     'cart': cart,
                     'items': items,
-                    'invoice_form': AnonymousAddressForm(prefix='invoice'),
                     'shipping_form': AnonymousAddressForm(prefix='shipping'),
+                    'invoice_form': AnonymousAddressForm(prefix='invoice'),
                 }
 
             except:
@@ -191,6 +191,7 @@ class CheckoutView(View):
 
             if self.request.POST.get('same_as_shipping', False):
                 invoice_address = delivery_address
+                print('INVOICE SAME AS DELIVERY')
 
             else:
                 invoice_address = AnonymousAddressForm(data, prefix='invoice')
