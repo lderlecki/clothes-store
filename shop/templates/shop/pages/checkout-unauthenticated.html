@@ -2,27 +2,21 @@
 <div class="header">
     <span>Addresses</span>
 </div>
-<div id="shipping_form">
+<div id="shipping_form" name="shipping-address">
     <h2 class="sub-header">Shipping address</h2>
-
-    {% include 'shop/pages/checkout-address-form.html' with address_form=invoice_form %}
+    <div class="input-group">
+        <div class="input-group">
+            <label class="input-group-label">Email Address</label>
+            <input name="email_address" type="email" required>
+        </div>
+        {% include 'shop/pages/checkout-address-form.html' with address_form=invoice_form %}
+    </div>
 </div>
-
+<input id="invoice-checkbox" type="checkbox" name="same_as_shipping" onclick="setBilling(this)">
 <hr>
-
-<div id="invoice_form">
+<div id="invoice_form" name="invoice-address">
     <h2 class="sub-header">Invoice address</h2>
-    {% include 'shop/pages/checkout-address-form.html' with address_form=shipping_form %}
-</div>
-
-{#<div class="address-footer">#}
-{#    <a href="{% url 'address-add' %}">#}
-{#        <i class="fa fa-plus"></i>#}
-{#        <span>Add new address</span>#}
-{#    </a>#}
-{#</div>#}
-<hr>
-<div class="justify-center">
-    <input class="proceed-btn" id="checkout-proceed" type="submit" value="Order with the obligation to pay"
-           disabled>
+    <div class="input-group">
+        {% include 'shop/pages/checkout-address-form.html' with address_form=shipping_form %}
+    </div>
 </div>

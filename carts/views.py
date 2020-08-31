@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from orders.models import Order
-from users.forms import AddressForm
+from users.forms import AddressForm, AnonymousAddressForm
 from .models import *
 from shop.models import Product
 from shop.utils import generate_order_id
@@ -140,10 +140,9 @@ class CheckoutView(View):
                 context = {
                     'cart': cart,
                     'items': items,
-                    'invoice_form': AddressForm(),
-                    'shipping_form': AddressForm(),
+                    'invoice_form': AnonymousAddressForm(prefix='invoice'),
+                    'shipping_form': AnonymousAddressForm(prefix='shipping'),
                 }
-
 
             except:
                 messages.warning(self.request, "You do not have any items in cart")
@@ -152,14 +151,66 @@ class CheckoutView(View):
         return render(self.request, 'shop/pages/checkout.html', context)
 
     def post(self, *args, **kwargs):
+        # TODO:
+        #  handle unauthenticated user post request
         data = self.request.POST
-        customer = self.request.user.customer
-        cart = Cart.objects.get(customer=customer, completed=False)
+        print(data)
+        print(data.get('shipping-first_name'))
+        if self.request.POST.get('same_as_shipping', False):
+            print('True')
+        else:
+            print('False')
+
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            cart = Cart.objects.get(customer=customer, completed=False)
+            delivery_address = data['address-delivery']
+            invoice_address = data['address-invoice']
+
+        else:
+            if not data.get('email_address', False):
+                messages.warning('Enter valid email address')
+                return redirect('checkout')
+            customer, created = Customer.objects.get_or_create(
+                email=data.get('email_address'),
+                first_name=data.get('shipping-first_name'),
+                last_name=data.get('shipping-last_name'),
+                phone=data.get('shipping-phone'),
+                )
+            delivery_address = AnonymousAddressForm(data, prefix='shipping')
+            if delivery_address.is_valid():
+                delivery_address = delivery_address.save(commit=False)
+                delivery_address.customer = customer
+                delivery_address.address_type = 'S'
+                delivery_address.save()
+                delivery_address = delivery_address.id
+                print(delivery_address)
+            else:
+                print(delivery_address.errors)
+                print('Error delivery address')
+
+            if self.request.POST.get('same_as_shipping', False):
+                invoice_address = delivery_address
+
+            else:
+                invoice_address = AnonymousAddressForm(data, prefix='invoice')
+                if invoice_address.is_valid():
+                    invoice_address = invoice_address.save(commit=False)
+                    invoice_address.customer = customer
+                    invoice_address.address_type = 'S'
+                    invoice_address.save()
+                    invoice_address = invoice_address.id
+                else:
+                    print(invoice_address.errors)
+                    print('Error invoice address')
+            cart = Cart.objects.get(cart_id=self.request.session['cart_id'])
+            cart.customer = customer
+            cart.save()
+
         try:
             if cart.items_number > 0:
                 order, created = Order.objects.get_or_create(customer=customer, cart=cart)
-                delivery_address = data['address-delivery']
-                invoice_address = data['address-invoice']
+                print('order created')
 
                 if created:
                     order.order_id = generate_order_id(id=order.id)
@@ -171,7 +222,7 @@ class CheckoutView(View):
 
                 # cart.completed = True
                 # cart.save()
-
+                print('end')
                 return redirect('checkout-confirm')
             else:
                 messages.warning(self.request, "Your cart is empty. Add some products then proceed to checkout")
@@ -182,7 +233,7 @@ class CheckoutView(View):
             return redirect('store-main')
 
 
-class CheckoutCompleted(LoginRequiredMixin, View):
+class CheckoutCompleted(View):
     def get(self, *args, **kwargs):
         try:
             print(self.request.session['order_id'])

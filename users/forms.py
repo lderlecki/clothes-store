@@ -82,3 +82,10 @@ class AddressForm(ModelForm):
         fields = ('name', 'first_name', 'last_name', 'company_name',
                   'tax_number', 'street', 'number', 'zip_code', 'city',
                   'country', 'phone', 'default', 'address_type')
+
+
+class AnonymousAddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = ('first_name', 'last_name', 'company_name', 'tax_number',
+                  'street', 'number', 'zip_code', 'city', 'country', 'phone')

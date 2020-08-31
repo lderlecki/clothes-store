@@ -6,13 +6,22 @@
     <div class="container-fluid">
         <div class="checkout-wrapper">
             <section class="client-info">
-                <form id="checkout-form" action="" method="POST" onsubmit="return validateCheckoutForm()">
-                    {% csrf_token %}
-                    {% if user.is_authenticated %}
-                        {% include 'shop/pages/checkout-authenticated.html' %}
-                    {% else %}
-                        {% include 'shop/pages/checkout-unauthenticated.html' %}
-                    {% endif %}
+                {% if user.is_authenticated %}
+                    <form id="checkout-form" action="" method="POST" onsubmit="return validateCheckoutForm()">
+                {% else %}
+                    <form id="checkout-form" action="" method="POST">
+                {% endif %}
+
+                        {% csrf_token %}
+                        {% if user.is_authenticated %}
+                            {% include 'shop/pages/checkout-authenticated.html' %}
+                        {% else %}
+                            {% include 'shop/pages/checkout-unauthenticated.html' %}
+                        {% endif %}
+                        <hr>
+                        <div class="justify-center">
+                            <input class="proceed-btn" id="checkout-unauthenticated" type="submit" value="Order with the obligation to pay">
+                        </div>
                 </form>
 
             </section>

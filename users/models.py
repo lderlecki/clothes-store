@@ -27,8 +27,8 @@ class Customer(models.Model):
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=100, default='My address')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True, null=True, default='My address')
+    customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE)
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
