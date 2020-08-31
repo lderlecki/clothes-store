@@ -9,7 +9,7 @@
             <label class="input-group-label">Email Address</label>
             <input name="email_address" type="email" required>
         </div>
-        {% include 'shop/pages/checkout-address-form.html' with address_form=invoice_form %}
+        {% include 'shop/pages/checkout-address-form.html' with address_form=shipping_form %}
     </div>
 </div>
 <input id="invoice-checkbox" type="checkbox" name="same_as_shipping" onclick="setBilling(this)">
@@ -17,6 +17,6 @@
 <div id="invoice_form" name="invoice-address">
     <h2 class="sub-header">Invoice address</h2>
     <div class="input-group">
-        {% include 'shop/pages/checkout-address-form.html' with address_form=shipping_form %}
+        {% include 'shop/pages/checkout-address-form.html' with address_form=invoice_form %}
     </div>
 </div>
