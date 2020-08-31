@@ -25,8 +25,12 @@ def cart_view(request):
             messages.warning(request, "Yor cart is empty")
             return redirect('store-main')
     else:
-        cart = Cart.objects.get(cart_id=request.session['cart_id'])
-        items = cart.cartitem_set.all()
+        if request.session.get('cart_id', False):
+            cart = Cart.objects.get(cart_id=request.session['cart_id'])
+            items = cart.cartitem_set.all()
+        else:
+            messages.warning(request, "Yor cart is empty")
+            return redirect('store-main')
 
     context = {
         'items': items,
@@ -49,10 +53,9 @@ def add_to_cart(request):
             cart.save()
     else:
         request.session.set_expiry(86400)  # expire after one day
-        try:
-            cart_id = request.session['cart_id']
-        except:
-            print('create cart')
+
+        cart_id = request.session.get('cart_id', None)
+        if cart_id is None:
             cart = Cart()
             cart.save()
             cart.cart_id = generate_order_id(cart.id)
@@ -64,6 +67,7 @@ def add_to_cart(request):
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
+            #  TODO: handle product does not exist exception
             pass
 
     cart_product, created = CartItem.objects.get_or_create(cart=cart, product=product)
@@ -144,22 +148,14 @@ class CheckoutView(View):
                     'invoice_form': AnonymousAddressForm(prefix='invoice'),
                 }
 
-            except:
+            except Cart.DoesNotExist:
                 messages.warning(self.request, "You do not have any items in cart")
                 return redirect('store-main')
 
         return render(self.request, 'shop/pages/checkout.html', context)
 
     def post(self, *args, **kwargs):
-        # TODO:
-        #  handle unauthenticated user post request
         data = self.request.POST
-        print(data)
-        print(data.get('shipping-first_name'))
-        if self.request.POST.get('same_as_shipping', False):
-            print('True')
-        else:
-            print('False')
 
         if self.request.user.is_authenticated:
             customer = self.request.user.customer
@@ -187,11 +183,9 @@ class CheckoutView(View):
                 print(delivery_address)
             else:
                 print(delivery_address.errors)
-                print('Error delivery address')
 
             if self.request.POST.get('same_as_shipping', False):
                 invoice_address = delivery_address
-                print('INVOICE SAME AS DELIVERY')
 
             else:
                 invoice_address = AnonymousAddressForm(data, prefix='invoice')
@@ -203,7 +197,7 @@ class CheckoutView(View):
                     invoice_address = invoice_address.id
                 else:
                     print(invoice_address.errors)
-                    print('Error invoice address')
+
             cart = Cart.objects.get(cart_id=self.request.session['cart_id'])
             cart.customer = customer
             cart.save()
@@ -211,7 +205,6 @@ class CheckoutView(View):
         try:
             if cart.items_number > 0:
                 order, created = Order.objects.get_or_create(customer=customer, cart=cart)
-                print('order created')
 
                 if created:
                     order.order_id = generate_order_id(id=order.id)
@@ -223,7 +216,6 @@ class CheckoutView(View):
 
                 # cart.completed = True
                 # cart.save()
-                print('end')
                 return redirect('checkout-confirm')
             else:
                 messages.warning(self.request, "Your cart is empty. Add some products then proceed to checkout")

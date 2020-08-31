@@ -9,7 +9,7 @@ ADDRESS_CHOICES = (
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL)
     first_name = models.CharField(max_length=100, null=True)
     last_name = models.CharField(max_length=100, null=True)
     phone = models.CharField(max_length=100, null=True)
@@ -24,6 +24,12 @@ class Customer(models.Model):
         if not self.cart_set.get(completed=False):
             return 0
         return self.cart_set.get(completed=False).items_number
+
+    @property
+    def has_active_cart(self):
+        if self.cart_set.filter(completed=False):
+            return True
+        return False
 
 
 class Address(models.Model):

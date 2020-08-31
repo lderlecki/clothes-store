@@ -2,8 +2,8 @@ from datetime import datetime
 
 from django.db import models
 
-from shop.models import *
-from users.models import *
+from shop.models import Product
+from users.models import Customer
 
 
 COMPLETED_CHOICES = (

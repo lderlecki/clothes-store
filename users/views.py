@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from carts.models import Cart
+from carts.models import Cart, CartItem
 from orders.models import Order
 from .forms import (
     CreateUserForm,
@@ -23,8 +23,28 @@ def loginView(request):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
-
         if user is not None:
+            if request.session.get('cart_id', False):
+                #  Add session cart items to the user cart
+                #  and delete session cart object
+                cart_id = request.session['cart_id']
+                cart = Cart.objects.get(cart_id=cart_id)
+                if user.customer.has_active_cart:
+                    cart_items = cart.cartitem_set.all()
+                    user_cart = user.customer.cart_set.get(completed=False)
+
+                    for cart_item in cart_items:
+                        cart_product, created = CartItem.objects.get_or_create(cart=user_cart, product=cart_item.product)
+                        if created:
+                            cart_product.quantity = cart_item.quantity
+                        else:
+                            cart_product.quantity += cart_item.quantity
+                        cart_product.save()
+                    cart.delete()
+                else:
+                    cart.customer = user.customer
+                    cart.save()
+
             login(request, user)
             return redirect('home')
         messages.info(request, 'Username or password is incorrect')

@@ -7,6 +7,7 @@
     <br>
     <div class="container-fluid">
         <div class="products-brick">
+            {% csrf_token %}
             {% for product in products %}
                 <div class="item-product">
                     <a href="{% url 'product-detail' product.id %}">
