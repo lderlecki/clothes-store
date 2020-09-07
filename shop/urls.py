@@ -18,6 +18,6 @@ urlpatterns = [
 
     # Staff views
     path('dashboard/', views.dashboard, name='admin-dashboard'),
-    path('dashboard/customer/<str:id>/', views.dashboardCustomer, name='admin-dashboard-client'),
+    path('dashboard/customer/<str:customer_id>/', views.dashboardCustomer, name='admin-dashboard-client'),
 
 ]

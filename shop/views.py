@@ -1,12 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from carts.models import Cart
 from orders.models import Order
 from users.models import Customer
-from .models import (
-        Product,
-        Category
-    )
+from .models import Product
 
 
 def home(request):
@@ -44,11 +40,14 @@ def product(request, pk):
 
 
 def dashboard(request):
-    customers = Customer.objects.all()
-    orders = Order.objects.all()
-    delivered = orders.filter(status='delivered').count()
-    pending = orders.filter(status='pending').count()
-    started = orders.filter(status='started').count()
+    if request.user.is_staff:
+        customers = Customer.objects.all()
+        orders = Order.objects.all()
+        delivered = orders.filter(status='delivered').count()
+        pending = orders.filter(status='pending').count()
+        started = orders.filter(status='started').count()
+    else:
+        return redirect('home')
 
     context = {
         'customers': customers,
@@ -61,10 +60,12 @@ def dashboard(request):
     return render(request, 'shop/pages/admin-dashboard.html', context)
 
 
-def dashboardCustomer(request, id):
+def dashboardCustomer(request, customer_id):
     if request.user.is_staff:
-        customer = Customer.objects.get(id=id)
+        customer = Customer.objects.get(id=customer_id)
         orders = customer.order_set.all()
+    else:
+        return redirect('home')
 
     context = {
         'customer': customer,

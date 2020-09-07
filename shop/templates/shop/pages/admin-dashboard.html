@@ -40,7 +40,7 @@
 				</tr>
 				{% for order in orders %}
 				<tr>
-					<td>{{order.cart}}</td>
+					<td>{{order.cart.cart_id}}</td>
 					<td>{{order.date_ordered}}</td>
 					<td>{{order.status}}</td>
 					<td class="td-button"><a class="btn btn-sm btn-info" href="#">Update</a></td>

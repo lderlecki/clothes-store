@@ -21,7 +21,7 @@ class Customer(models.Model):
 
     @property
     def total_cart_items(self):
-        if not self.cart_set.get(completed=False):
+        if not self.cart_set.filter(completed=False):
             return 0
         return self.cart_set.get(completed=False).items_number
 
@@ -55,14 +55,10 @@ class Address(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.name}'
 
-    @property
-    def get_default(self, address_type=None):
-        if address_type:
-            return self.customer.address_set.filter(default=True, address_type=address_type)
-        return self.customer.address_set.filter(default=True)
-
     def save(self, *args, **kwargs):
         if self.default:
-            Address.objects.filter(customer=self.customer, default=True, address_type=self.address_type).update(default=False)
+            Address.objects.filter(
+                customer=self.customer, default=True, address_type=self.address_type
+            ).update(default=False)
         super(Address, self).save(*args, **kwargs)
 

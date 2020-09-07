@@ -5,6 +5,8 @@ from django.db import models
 from shop.models import Product
 from users.models import Customer
 
+from shop.utils import generate_order_id
+
 
 COMPLETED_CHOICES = (
     (True, 'Yes'),

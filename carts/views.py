@@ -1,15 +1,16 @@
-import json
-
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from orders.models import Order
-from users.forms import AddressForm, AnonymousAddressForm
-from .models import *
+
+from users.forms import AnonymousAddressForm
+from users.models import Customer
+
+from .models import Cart, CartItem
+
 from shop.models import Product
 from shop.utils import generate_order_id
 
@@ -58,17 +59,17 @@ def add_to_cart(request):
         if cart_id is None:
             cart = Cart()
             cart.save()
-            cart.cart_id = generate_order_id(cart.id)
+            cart_id = generate_order_id(cart.id)
+            cart.cart_id = cart_id
             cart.save()
-            request.session['cart_id'] = cart.cart_id
-            cart_id = cart.cart_id
+            request.session['cart_id'] = cart_id
 
         cart = Cart.objects.get(cart_id=cart_id)
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            #  TODO: handle product does not exist exception
-            pass
+            messages.warning(request, "This product is not available in our shop.")
+            return redirect('shop')
 
     cart_product, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
@@ -109,7 +110,7 @@ def get_cart_data(request):
                 'cart_items': cart.items_number,
             }
             return JsonResponse(context, safe=False)
-    return Http404
+    return HttpResponseNotFound()
 
 
 class CheckoutView(View):
@@ -165,7 +166,7 @@ class CheckoutView(View):
 
         else:
             if not data.get('email_address', False):
-                messages.warning('Enter valid email address')
+                messages.warning(self.request, 'Enter valid email address')
                 return redirect('checkout')
             customer, created = Customer.objects.get_or_create(
                 email=data.get('email_address'),
@@ -214,15 +215,16 @@ class CheckoutView(View):
                 order.save()
                 self.request.session['order_id'] = order.order_id
 
-                # cart.completed = True
-                # cart.save()
+                cart.completed = True
+                cart.save()
+
                 return redirect('checkout-confirm')
             else:
-                messages.warning(self.request, "Your cart is empty. Add some products then proceed to checkout")
+                messages.warning(self.request, 'Your cart is empty. Add some products then proceed to checkout')
                 return redirect('store-main')
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
+            messages.warning(self.request, 'You do not have an active order')
             return redirect('store-main')
 
 
@@ -240,5 +242,5 @@ class CheckoutCompleted(View):
             return render(self.request, 'shop/pages/order-completed.html', context)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
+            messages.warning(self.request, 'You do not have an active order')
             return redirect('store-main')
